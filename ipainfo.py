@@ -69,8 +69,12 @@ def __main__():
         return
 
     param = ""
-    if len(sys.argv) > 1:
+    if len(sys.argv) > 2:
         param = sys.argv[1]
+        param1 = sys.argv[2]
+    elif len(sys.argv) > 1:
+        param = sys.argv[1]
+        param1 = ""
 
     if not str(param).startswith("/"):
         param = os.path.join(os.getcwd(), param)
@@ -119,24 +123,31 @@ def __main__():
             getinfo = True
             break
 
-    print("ipa info")
-    print("***********************************")
-    print("app name: [" + CFBundleDisplayName + "]")
-    print("bundle id: [" + CFBundleIdentifier + "]")
-    print("version: [" + CFBundleShortVersionString + "]")
-    print("build: [" + CFBundleVersion + "]")
-    print("provison profile: [" + str(plist_obj["Name"]) + "]")
-    print("codesign team name: [" + str(plist_obj["TeamName"]) + "]")
+    if param1 == "":
+        print("ipa info")
+        print("***********************************")
+        print("app name: [" + CFBundleDisplayName + "]")
+        print("bundle id: [" + CFBundleIdentifier + "]")
+        print("version: [" + CFBundleShortVersionString + "]")
+        print("build: [" + CFBundleVersion + "]")
+        print("provison profile: [" + str(plist_obj["Name"]) + "]")
+        print("codesign team name: [" + str(plist_obj["TeamName"]) + "]")
 
-    Entitlements = plist_obj["Entitlements"]
-    print("using entitlements:")
-    print(json.dumps(Entitlements, sort_keys=True, indent=2))
+        Entitlements = plist_obj["Entitlements"]
+        print("using entitlements:")
+        print(json.dumps(Entitlements, sort_keys=True, indent=2))
 
-    print("***********************************")
+        print("***********************************")
 
+        print("Done")
+    elif param1 == "-b":
+        print(CFBundleIdentifier)
+    elif param1 == "-n":
+        print(CFBundleDisplayName.encode('utf8'))
+        
     if os.path.isdir(tmp_path):
         shutil.rmtree(tmp_path)
 
-    print("Done")
+    
 
 __main__()
